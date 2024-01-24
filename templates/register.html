@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main-content %}
+
+<style>
+    body{
+    
+    }
+    .register{
+        padding: 10rem 5rem;
+        width: 50vw;
+       
+    }
+
+    @media (max-width: 576px) {
+        .register{
+        width: 90%;
+    } 
+    }
+</style>
+
+<div class="container register">
+
+    <div id="alertres" class="alert alert-success  alert-dismissible fade " role="alert">
+        <strong id="loginres"></strong> 
+        <button onclick="handleRemovePos()" type="button" class="close " data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+    <div id="alerterr" class="alert alert-warning alert-dismissible fade " role="alert">
+        <strong id="loginerr"></strong> 
+        <button onclick="handleRemove()" type="button" class="close " data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+    <form  method="post" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div class="row">
+
+            <div class="mb-3 col-md-6">
+                <input type="text" id="first_name" name="first_name" class="form-control">
+                <label for="first_name" class="form-label">firstname</label>
+            </div>
+    
+            <div class="mb-3 col-md-6">
+                <input type="text" id="last_name" name="last_name" class="form-control">
+                <label for="last_name" class="form-label">lastname</label>
+            </div>
+
+            <div class="mb-3 col-md-6">
+                <input type="text" id="username" name="username" class="form-control">
+                <label for="username" class="form-label">username</label>
+            </div>
+            <div class="mb-3 col-md-6">
+                <input type="email" id="email" name="email" class="form-control">
+                <label for="email" class="form-label">Email</label>
+            </div>
+    
+
+            <div class="mb-3 col-md-6">
+                <input type="password" id="password" name="password" class="form-control">
+                <label for="password" class="form-label">Password</label>
+            </div>
+
+    
+
+            {% if question %}
+            <div class="mb-3 col-md-6">
+            
+            <select class="form-select " id="question">
+            {% for q in question %}
+               
+            <option class="p-2" value="{{q.title}}">{{q.title}}</option>
+               
+                {% endfor %}
+            </select>
+            <label for="question" class="form-label">Pick a Question</label>
+            </div>
+            {% endif %}
+
+            <textarea id="answer" class="my-1" name="" id="" class="form-control  "></textarea>
+
+        </div>
+
+        
+
+        <button onclick="Signup()" type="button" class="btn-md btn btn-dark">Signup</button>
+        
+    </form>
+
+    <a href="/login" class=" lead d-block  "> you have an account? Login</a>
+</div>
+
+<!-- <script src="{% static 'assets/js/main.js' %}"></script> -->
+
+{% endblock %}

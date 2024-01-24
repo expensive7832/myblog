@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main-content %}
+
+<style>
+    body {}
+
+    .register {
+        padding: 10rem 5rem;
+        width: 50vw;
+
+    }
+
+    @media (max-width: 576px) {
+        .register {
+            width: 90%;
+        }
+    }
+</style>
+
+<div class="container register">
+
+    <div id="alertres" class="alert alert-success  alert-dismissible fade " role="alert">
+        <strong id="loginres"></strong>
+        <button onclick="handleRemovePos()" type="button" class="close " data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div id="alerterr" class="alert alert-warning alert-dismissible fade " role="alert">
+        <strong id="loginerr"></strong>
+        <button onclick="handleRemove()" type="button" class="close " data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <!-- Nav tabs -->
+    <div class="container">
+        <ul class="nav nav-tabs justify-content-around " id="myTab" role="tablist">
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#cimage"
+                    type="button" role="tab" aria-controls="change image" aria-selected="true">
+                    Change Profile Image
+                </button>
+            </li>
+
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="messages-tab" data-bs-toggle="tab" data-bs-target="#other" type="button"
+                    role="tab" aria-controls="messages" aria-selected="false">
+                    Other
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    {% if auth  %}
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane p-3 active" id="cimage" role="tabpanel" aria-labelledby="home-tab">
+
+        
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3 d-flex align-items-center gap-3">
+                <img width="100" height="100" class="img-fluid " src="/media/{{auth.image}}" alt="profile image">
+                <input accept="image/*" type="file" id="updateimage" name="uimg" class="form-control">
+            </div>
+
+            <button class="btn-md btn btn-dark">Update Photo</button>
+        </form>
+
+    </div>
+
+    
+
+    <div class="tab-pane" id="other" role="tabpanel" aria-labelledby="messages-tab">
+        <div class="row mt-3 align-items-center ">
+            <input type="text" hidden id="user" value="{{auth.id}}" >
+            <div class="mb-3 col-md-6">
+                <input value="{{auth.first_name}}" type="text" id="first_name" name="first_name" class="form-control">
+                <label for="first_name" class="form-label">First Name</label>
+            </div>
+
+            <div class="mb-3 col-md-6">
+                <input value="{{auth.last_name}}" type="text" id="last_name" name="last_name" class="form-control">
+                <label for="last_name" class="form-label">Last Name</label>
+            </div>
+
+            <input type="text" value="{{auth.username}}" hidden id="oldusername" >
+
+            <div class="mb-3 col-md-6">
+                <input value="{{auth.username}}" type="text" id="username" name="username" class="form-control">
+                <label for="username">Username</label>
+            </div>
+
+            <div class="mb-3 col-md-6">
+            <button  type="button" onclick="handleNameUpdate()" class="btn btn-dark mt-3 btn-lg">Update</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+    {% endif %}
+
+
+</div>
+
+<!-- <script src="{% static 'assets/js/main.js' %}"></script> -->
+
+{% endblock %}

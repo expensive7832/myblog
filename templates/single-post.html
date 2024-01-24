@@ -1,0 +1,380 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main-content%}
+
+<main id="main">
+
+  {% if data %}
+
+  <section class="single-post-content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-9 post-content" data-aos="fade-up">
+
+          <!-- ======= Single Post Content ======= -->
+          <div class="single-post">
+            <div class="post-meta"><span class="date">{{data.cat.title}}</span> <span class="mx-1">&bullet;</span>
+              <span>{{data.dateCreated|date:"F j, Y"}}</span></div>
+            <h1 class="mb-5">{{data.title}}</h1>
+
+            <p>{{data.desc|safe}}</p>
+
+            <div class="d-flex gap-3  flex-wrap align-items-center">
+
+              {% for img in data.image.all %}
+              <img class="img-fluid flex-1" src="/media/{{img}}" alt="blog image">
+              {% endfor %}
+
+            </div>
+
+            <!-- ======= Comments ======= -->
+            {% if comments  %}
+            <div class="comments">
+              <h5 class="comment-title py-4">{{ comments|length }} {% if comments|length == 1%}Comment{%else%}Comments{% endif %}</h5>
+              {% for comment in comments  %}
+              <div class="comment d-flex mb-4">
+                <div class="flex-shrink-0">
+                  <div class="avatar avatar-sm rounded-circle">
+              
+                   {% if comment.user.image %}
+                   <img class="avatar-img" src="/media/{{comment.user.image}}" alt="" class="img-fluid">
+                   {% else %}
+                   <i class="bi bi-person-circle fs-4 "></i>
+                   {% endif %}
+                  </div>
+                </div>
+                <div class="flex-grow-1 ms-2 ms-sm-3">
+                 <div class="d-flex gap-5">
+                  <div class="comment-meta d-flex align-items-baseline">
+                    <h6 class="me-2">
+                      {% if comment.user.is_superuser %}
+                      admin
+                      {% else %}
+                      {{comment.user.first_name}} {{comment.user.last_name}}
+                      {% endif %}
+                    </h6>
+                    
+                    <span class="text-muted">{{ comment.datePosted|timesince }}</span>
+                  </div>
+                  {% if auth.id == comment.user.id %}
+                      
+                      <i onclick="handleRemoveComment('{{comment.id}}' )" class="bi bi-x btn btn-dark btn-sm"></i>
+                    {% endif %}
+                 </div>
+                  <div class="comment-body">
+                    {{ comment.message }}
+                  </div>
+
+                  <div class="">
+
+                    {% if comment.replies.all|length > 0 %}
+                   
+                    <div class="bg-light comment-replies  p-3 mt-3 rounded">
+                     
+                     
+                      <h6 class="comment-replies-title  mb-4 text-muted text-uppercase">
+                        {% if comment.replies.all|length == 1 %}
+                        {{comment.replies.all|length }} reply
+                        {% else %} 
+                        {{comment.replies.all|length }} replies {% endif %}
+                      </h6>
+                      {% for cm in comment.replies.all %}
+                      <div class="reply d-flex mb-4">
+                        <div class="flex-shrink-0">
+                          <div class="avatar avatar-sm rounded-circle">
+                            <img class="avatar-img" src="/media/{{cm.user.image}}" alt="" class="img-fluid">
+                          </div>
+                        </div>
+                        <div class="flex-grow-1 ms-2 ms-sm-3">
+                          <div class="reply-meta d-flex align-items-baseline">
+                            <h6 class="mb-0 me-2">
+                              {% if cm.user.is_superuser%}
+                              admin
+                              {% else %}
+                              {{cm.user.first_name}} {{cm.user.last_name}}
+                              {% endif %}
+                            </h6>
+                            
+                            <span class="text-muted">{{cm.datePosted|timesince}}</span>
+                          </div>
+                          <div class="reply-body d-flex align-items-center  gap-4">
+                    
+                           <span>{{cm.message}}</span>
+                           <div class="my-1">
+                            <small id="err"></small>
+                            {% if auth.id == cm.user.id %}
+                      
+                            <i onclick="handleRemoveReply('{{comment.id}}','{{cm.id}}' )" class="bi bi-x btn btn-dark btn-sm"></i>
+                            {% endif %}
+                           </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+                     
+                    {% endfor %} 
+
+  
+                     
+                      
+                      
+                    </div>
+                    {% endif %}
+                    {% if error %}
+                    {% for message in messages %}
+                    
+                    <div id="alert" class="alert alert-warning alert-dismissible fade show" role="alert">
+                      <strong>{{message}}</strong> 
+                      <button onclick="handleRemove()" type="button" class="close " data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <form method="post" class="mt-2">
+                      {% csrf_token %}
+                     
+                      <input name="comment" value="{{comment.id}}" type="text" hidden>
+                      <textarea  name="reply" id=""  class="form-control"></textarea>
+                      <button class="btn btn-dark mt-1 float-end ">Reply</button>
+                    </form>
+
+                  </div>
+                </div>
+              </div>
+
+              {% endfor  %}
+
+            </div>
+            {% endif %}
+            <!-- End Comments -->
+
+            <!-- ======= Comments Form ======= -->
+            <div class="row justify-content-center mt-5">
+
+              
+              <div class="col-lg-12">
+                <h5 class="comment-title">Leave a Comment</h5>
+                <form method="post" class="row">
+
+                  {% csrf_token %}
+                 
+                  <div class="col-12 mb-3">
+                    <textarea name="message" class="form-control" id="comment-message" placeholder="message here" cols="30"
+                    rows="10"></textarea>
+                  </div>
+
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Comment</button>
+                   
+                    
+                  </div>
+
+                </form>
+              </div>
+             
+            </div><!-- End Comments Form -->
+
+          </div>
+         
+        </div>
+        <div class="col-md-3">
+          <!-- ======= Sidebar ======= -->
+          <div class="aside-block">
+
+            <!-- <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-popular-tab" data-bs-toggle="pill"
+                  data-bs-target="#pills-popular" type="button" role="tab" aria-controls="pills-popular"
+                  aria-selected="true">Popular</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-trending-tab" data-bs-toggle="pill"
+                  data-bs-target="#pills-trending" type="button" role="tab" aria-controls="pills-trending"
+                  aria-selected="false">Trending</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-latest"
+                  type="button" role="tab" aria-controls="pills-latest" aria-selected="false">Latest</button>
+              </li>
+            </ul> -->
+
+            <!-- <div class="tab-content" id="pills-tabContent">
+
+            
+              <div class="tab-pane fade show active" id="pills-popular" role="tabpanel"
+                aria-labelledby="pills-popular-tab">
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>Jul
+                      5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">17 Pictures of Medium Length Hair in Layers That Will Inspire Your New
+                      Haircut</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">9 Half-up/half-down Hairstyles for Long and Medium Hair</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">Life Insurance And Pregnancy: A Working Mom’s Guide</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">The Best Homemade Masks for Face (keep the Pimples Away)</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+              </div> <!-- End Popular -->
+
+             
+              <!-- <div class="tab-pane fade" id="pills-trending" role="tabpanel" aria-labelledby="pills-trending-tab">
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">17 Pictures of Medium Length Hair in Layers That Will Inspire Your New
+                      Haircut</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">9 Half-up/half-down Hairstyles for Long and Medium Hair</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">Life Insurance And Pregnancy: A Working Mom’s Guide</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>Jul
+                      5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">The Best Homemade Masks for Face (keep the Pimples Away)</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+              </div>
+
+          
+              <div class="tab-pane fade" id="pills-latest" role="tabpanel" aria-labelledby="pills-latest-tab">
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">Life Insurance And Pregnancy: A Working Mom’s Guide</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">The Best Homemade Masks for Face (keep the Pimples Away)</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">10 Life-Changing Hacks Every Working Mom Should Know</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Sport</span> <span class="mx-1">&bullet;</span> <span>Jul
+                      5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Lifestyle</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">17 Pictures of Medium Length Hair in Layers That Will Inspire Your New
+                      Haircut</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+                <div class="post-entry-1 border-bottom">
+                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span>
+                    <span>Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a href="#">9 Half-up/half-down Hairstyles for Long and Medium Hair</a></h2>
+                  <span class="author mb-3 d-block">Jenny Wilson</span>
+                </div>
+
+              </div>  -->
+              {% if otherarticle %}
+              {% for other in otherarticle %}
+              <div class="post-entry-1 border-bottom">
+                <div class="post-meta"><span class="date">{{other.cat.title}}</span> <span class="mx-1">&bullet;</span>
+                  <span>{{other.dateCreated|date:"F j, Y"}}</span></div>
+                <h2 class="mb-2"><a href="{{other.id}}">{{other.title}}</a></h2>
+                <span class="author mb-3 d-block">
+                  {% if other.user.is_superuser  %}
+                  admin
+                  {% else %}
+                  {{other.user.first_name}}{{other.user.first_name}}
+                  {% endif %}
+                </span>
+              </div>
+              {% endfor %}
+              {% endif %}
+            </div> 
+          </div>
+
+          
+          
+        
+        </div>
+      </div>
+  </section>
+
+  {% else %}
+
+  <h4 data-aos="fade-up" class="text-warning text-center  h1">No Article Found</h4>
+
+  {% endif %}
+</main><!-- End #main -->
+
+
+
+
+{% endblock %}

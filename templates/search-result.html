@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main-content %}
+
+<main id="main">
+
+  <!-- ======= Search Results ======= -->
+  <section id="search-result" class="search-result">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-9">
+          <h3 class="category-title">Search Results</h3>
+
+          {% if results %}
+
+          {% for r in results %}
+
+          <div class="d-md-flex post-entry-2 small-img">
+            <a href="/single-post/{{r.id}}" class="me-4 thumbnail">
+              <img src="/media/{{r.image.first}}" alt="" class="img-fluid">
+            </a>
+            <div>
+              <div class="post-meta"><span class="date">{{r.cat.title}}</span> <span class="mx-1">&bullet;</span> <span>{{r.dateCreated|date:"F j, Y"}}</span></div>
+              <h3><a href="/single-post/{{r.id}}">{{r.title}}</a></h3>
+              <p>{{r.desc|truncatechars_html:50|safe }}</p>
+              
+              <div class="d-flex align-items-center author">
+                <div class="photo"><img src="/media/{{r.user.image}}" alt="" class="img-fluid"></div>
+                <div class="name">
+                  <h3 class="m-0 p-0">
+                    {% if r.user.is_superuser %}
+                    admin
+                    {% else %}
+                    {{ r.user.first_name }} {{ r.user.last_name}}
+                    {% endif %}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+
+          {% endfor %}
+
+          {% else %}
+          <h4 class="text-warning h2">No search Result</h4>
+          {% endif %}
+
+          <!-- Paging 
+          <div class="text-start py-4">
+            <div class="custom-pagination">
+              <a href="#" class="prev">Prevous</a>
+              <a href="#" class="active">1</a>
+              <a href="#">2</a>
+              <a href="#">3</a>
+              <a href="#">4</a>
+              <a href="#">5</a>
+              <a href="#" class="next">Next</a>
+            </div>
+          </div>
+          End Paging -->
+
+        </div>
+
+        <div class="col-md-3">
+          <!-- ======= Sidebar ======= -->
+          <div class="aside-block">
+
+            {% if others %}
+            {% for other in others %}
+            <div class="post-entry-1 border-bottom">
+              <div class="post-meta"><span class="date">{{other.cat.title}}</span> <span class="mx-1">&bullet;</span> <span>{{other.dateCreated|date:"F j, Y"}}</span></div>
+              <h2 class="mb-2"><a href="/single-post/{{other.id}}">{{other.title}}</a></h2>
+              <span class="author mb-3 d-block">
+                {% if other.user.is_superuser %}
+                admin
+                {% else %}
+                {{ other.user.first_name}} {{ other.user.last_name}}
+                {% endif %}
+              </span>
+            </div>
+            {% endfor %}
+            {% endif %}
+            </div> 
+          </div>
+
+          
+        </div>
+
+      </div>
+    </div>
+  </section> <!-- End Search Result -->
+
+</main><!-- End #main -->
+
+
+{% endblock %}

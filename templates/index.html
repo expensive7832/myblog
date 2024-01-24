@@ -1,0 +1,388 @@
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block main-content %}
+
+<style>
+  .design{
+    background-repeat: no-repeat!important;
+    background-size: cover!important;
+    min-height: 70vh!important;
+    background-position: center!important;
+  }
+</style>
+
+<main id="main" class="">
+
+
+  <!-- ======= Hero Slider Section ======= -->
+  <section id="hero-slider" class="hero-slider">
+    <div class="container " data-aos="fade-in">
+      <div class="row">
+        <div class="col-12">
+          {% if banner %}
+          <div class="swiper sliderFeaturedPosts">
+            
+            {% if banner.image.all|length > 0  %}
+            <div class="swiper-wrapper">
+             {% for img in banner.image.all %}
+
+             <div class="swiper-slide">
+              <a style="background: url(media/{{img}});" href="single-post/{{banner.id}}" class="img-bg design d-flex align-items-end">
+                <div class="img-bg-inner">
+                  <h2>{{banner.title}}</h2>
+                  <p>{{banner.desc|truncatechars_html:50|safe }}</p>
+                </div>
+              </a>
+            </div>
+
+             {% endfor %}
+            </div>
+            {% else %}
+
+           <a  href="single-post/{{banner.id}}"  class="noimg img-bg d-flex align-items-center ">
+            <div class="img-bg-inner">
+              <h2 class="fw-bold">{{banner.title}}</h2>
+              <p>{{banner.desc|truncatechars_html:50|safe }}</p>
+            </div>
+           </a>
+
+            {% endif %}
+            <div class="custom-swiper-button-next">
+              <span class="bi-chevron-right"></span>
+            </div>
+            <div class="custom-swiper-button-prev">
+              <span class="bi-chevron-left"></span>
+            </div>
+
+            <div class="swiper-pagination"></div>
+          </div>
+
+          {% else %}
+
+          <img class="img-fluid" src="{% static 'assets/img/coding.avif' %}" alt="banner">
+
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section><!-- End Hero Slider Section -->
+
+  <!-- ======= Post Grid Section ======= -->
+  <section id="posts" class="posts">
+    <div class="container" data-aos="fade-up">
+      <div class="row g-5">
+        {% if singlepost %}
+        <div class="col-lg-4">
+          <div class="post-entry-1 lg">
+            <a href="single-post/{{singlepost.id}}">
+           
+              <img src="media/{{singlepost.image.first.image}}" alt="" class="img-fluid">
+              
+            </a>
+            <div class="post-meta"><span class="date">
+              
+              {{singlepost.cat.title}}
+            </span> <span class="mx-1">&bullet;</span> <span>{{singlepost.dateCreated|date:"F j, Y"}}</span></div>
+            <h2><a href="single-post/{{singlepost.id}}">{{singlepost.title}}</a></h2>
+            <p class="mb-4 d-block">{{  singlepost.desc|truncatechars_html:150|safe }}</p>
+
+            <div class="d-flex align-items-center author">
+              <div class="photo"><img  src="media/{{singlepost.user.image}}" alt="" class="img-fluid"></div>
+              <div class="name">
+               {% if singlepost.user.is_superuser %}
+               admin
+               {% else %}
+               <h3 class="m-0 p-0">{{singlepost.user.first_name}}</h3>
+               {% endif %}
+              </div>
+            </div>
+          </div>
+
+        </div>
+        {% endif %}
+
+        {% if frontpost %}
+        <div class="col-lg-8">
+          <div class="row g-5">
+            <div class="col-lg-8 border-start custom-border">
+              <div class="row">
+
+  
+              {% for fp in frontpost %}
+
+              <div class="post-entry-1 col-md-6">
+                <a href="single-post/{{fp.id}}">
+                  <img src="media/{{fp.image.first.image}}" alt="" class="img-fluid">
+                </a>
+                <div class="post-meta d-flex flex-wrap gap-2 ">
+                  
+                  <span class="date bg-dark p-1 text-white">{{fp.cat.title}}</span> 
+                 
+                   <span>&bullet;</span> <span >{{fp.dateCreated|date:"F j, Y"}}</span></div>
+                <h2><a href="single-post/{{fp.id}}">{{fp.title}}</a></h2>
+              </div>
+
+              {% endfor %}
+              
+              
+
+              </div>
+
+
+
+            </div>
+
+            
+
+            <!-- business Section -->
+            <div class="col-lg-4">
+
+             {% if business %}
+
+             
+           
+
+             <div class="trending">
+              <h3>Business</h3>
+              <ul class="trending-post">
+                  {% for bs in business %}
+                <li>
+                  <a href="single-post/{{bs.id}}">
+                    <span class="number">1</span>
+                    <h3>{{bs.title}}</h3>
+                    <span class="author">
+                      {% if bs.user.is_superuser %}
+                      admin
+                      {% else %}
+                      {{ bs.user.first_name}} {{ bs.user.last_name}}
+                      {% endif %}
+                    </span>
+                  </a>
+                </li>
+                  {% endfor %}
+              </ul>
+            </div>
+
+           
+
+             {% endif %}
+
+            </div> <!-- End business Section -->
+          </div>
+        </div>
+
+        {% endif %}
+
+      </div> <!-- End .row -->
+    </div>
+  </section> <!-- End Post Grid Section -->
+
+  <!-- ======= Tech Category Section ======= -->
+  <section class="category-section">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-header d-flex justify-content-between align-items-center mb-5">
+        <h2>Tech</h2>
+        <!-- <div><a href="tech.html" class="more">See All Tech</a></div> -->
+      </div>
+
+      {% if tech %}
+      <div class="row">
+        <div class="col-md-9">
+          {% if  first_tech != None %}
+          <div class="d-lg-flex post-entry-2">
+            <a href="single-post/{{first_tech.id}}" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
+              {% if first_tech.image.first != None %}
+             
+              <img style="width: 100%; object-fit: contain;" src="media/{{ first_tech.image.first }}" alt="tech photo" class="">
+              
+              {% else %}
+              
+              <img src="{% static 'assets/img/coding.avif' %}" alt="tech photo" class="img-fluid">
+              
+
+              {% endif %}
+            </a>
+           
+            <div>
+              <div class="post-meta"><span class="date">Tech</span> <span class="mx-1">&bullet;</span> <span>{{first_tech.dateCreated|date:"F j, Y"}}</span></div>
+              <h3><a href="single-post/{{first_tech.id}}">{{ first_tech.title  }}</a></h3>
+              <p>{{ first_tech.desc|truncatechars_html:150|safe  }}</p>
+              <div class="d-flex align-items-center author">
+                <div class="photo"><img src="media/{{first_tech.user.image}}" alt="" class="img-fluid"></div>
+                <div class="name">
+                  <h3 class="m-0 p-0">
+                    {% if first_tech.user.is_superuser %}
+                    admin
+                    {% else %}
+                    {{ first_tech.user.first_name}} {{ first_tech.user.last_name}}
+                    {% endif %}
+                  </h3>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+          {% endif %}
+
+         
+
+
+
+          {% if last_tech != None %}
+            <div class="">
+              <div class="post-entry-1">
+                <a href="single-post/{{last_tech.id}}">
+                  {% if last_tech.image.first != None %}
+                  <img src="media/{{last_tech.image.first}}" alt="" class="img-fluid">
+                  {% else %}
+                  <img src="{% static 'assets/img/coding.avif' %}" alt="" class="img-fluid">
+                  {% endif %}
+                </a>
+                <div class="post-meta"><span class="date">Tech</span> <span class="mx-1">&bullet;</span> <span>{{last_tech.dateCreated|date:"F j, Y"}}</span></div>
+                <h2 class="mb-2"><a href="single-post/{{last_tech.id}}">{{last_tech.title}}</a></h2>
+                <span class="author mb-3 d-block">
+                  {% if last_tech.user.is_superuser %}
+                  admin
+                  {% else %}
+                  {{ last_tech.user.first_name}} {{ last_tech.user.last_name}}
+                  {% endif %}
+                </span>
+                <p class="mb-4 d-block">
+                  {{last_tech.desc|truncatechars_html:150|safe }}
+                </p>
+              </div>
+            </div>
+
+          {% endif %}
+
+
+          
+         
+          
+        </div>
+
+        <div class="col-md-3">
+         
+          {% for t in othertech %}
+          <div class="post-entry-1 border-bottom">
+            <div class="post-meta"><span class="date">Tech</span> <span class="mx-1">&bullet;</span> <span>{{t|date:"F j, Y"}}</span></div>
+            <h2 class="mb-2"><a href="single-post/{{t.id}}">{{t.title}}</a></h2>
+            <span class="author mb-3 d-block">
+              {% if t.user.is_superuser %}
+              admin
+              {% else %}
+              {{ t.user.first_name}} {{ t.user.last_name}}
+              {% endif %}
+            </span>
+          </div>
+          {% endfor %}
+        
+
+          
+
+        </div>
+      </div>
+      {% else %}
+
+      <h4 class="text-warning ">No Tech News Currently, Check Later!!!</h4>
+
+      {% endif %}
+    </div>
+  </section><!-- End of Tech Category Section -->
+
+  <!-- ======= Business Category Section ======= -->
+  <section class="category-section">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-header d-flex justify-content-between align-items-center mb-5">
+        <h2>Business</h2>
+        <!-- <div><a href="category.html" class="more">See All Business</a></div> -->
+      </div>
+
+      <div class="row">
+        {% if businessdata %}
+        <div class="col-md-3">
+
+          
+         {% for lb in businessdata|slice:"0:3" %}
+
+         <div class="post-entry-1 border-bottom">
+          <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>{{lb.dateCreated|date:"F y, J"}}</span></div>
+          <h2 class="mb-2"><a href="single-post/{{lb.id}}">{{lb.title}}</a></h2>
+          <span class="author mb-3 d-block">
+            {% if lb.user.is_superuser %}
+            admin
+            {% else %}
+            {{ lb.user.first_name}} {{ lb.user.last_name}}
+            {% endif %}
+          </span>
+        </div>
+
+         {% endfor %}
+ 
+        </div>
+
+        {% if businessdata|length > 1 %}
+        {% with randomBs=business|random %}
+        <div class="col-md-6 ">
+
+          <div class=" post-entry-2 d-flex justify-content-center align-items-center ">
+          <div>
+              <a href="" class="me-4  single-post/{{randomBs.id}} thumbnail d-inline-block mb-4 mb-lg-0">
+             {% if randomBs.image.first != None %}
+              <img src="media/{{randomBs.image.first}}" alt="" class=" img-fluid ">
+             {% endif %}
+            </a>
+
+            <div class="my-2">
+              <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>{{randomBs.dateCreated|date:"F j, Y"}}</span></div>
+              
+            </div>
+          </div>
+          </div>
+
+         
+        </div>
+        {% endwith %}
+        {%  endif %}
+
+       <div class="col-md-3">
+        {% for lb in businessdata|slice:"3:6" %}
+
+        <div class="post-entry-1 border-bottom">
+         <div class="post-meta"><span class="date">Business</span> <span class="mx-1">&bullet;</span> <span>{{lb.dateCreated|date:"F j, Y"}}</span></div>
+         <h2 class="mb-2"><a href="ssingle-post/{{lb.id}}">{{lb.title}}</a></h2>
+         <span class="author mb-3 d-block">
+          {% if lb.user.is_superuser %}
+          admin
+          {% else %}
+          {{ lb.user.first_name}} {{ lb.user.last_name}}
+          {% endif %}
+         </span>
+       </div>
+
+        {% endfor %}
+       </div>
+
+        
+        {% else %}
+
+        <h4 class="text-warning ">No Business News Currently, Check Later!!!</h4>
+
+
+        {% endif %}
+       
+      </div>
+    </div>
+  </section><!-- End Business Category Section -->
+
+
+</main><!-- End #main -->
+
+
+{% endblock %}

@@ -1,0 +1,331 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %}</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link rel="stylesheet" href="{% static 'assets/vendor/aos/aos.min.css' %}">
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static '/assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %} " rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %} " rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %} " rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %} " rel="stylesheet">
+  
+
+  <!-- Template Main CSS Files -->
+  <link href="{% static 'assets/css/variables.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+
+
+</head>
+
+
+<body>
+
+
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="bg-light pb-3 ">
+    <div class="d-flex justify-content-between align-items-center ">
+      <nav class="navbar navbar-expand-md  " style="flex:4">
+        <div class="container">
+          <a class="navbar-brand logo" href="/">
+            <h1>EarDrop</h1>
+          </a>
+  
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+            aria-controls="offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+           
+                <div class="d-flex">
+                 
+  
+                    <a href="https://wa.me/+2348166398746" class="mx-2"><span class="bi-whatsapp"></span></a>
+                    <a href="https://twitter.com/esquirexpensive" class="mx-2"><span class="bi-twitter"></span></a>
+    
+                    <a href="https://instagram.com/expensive_7832" class="mx-2"><span class="bi-instagram"></span></a>
+                    <a href="https://linkedin.com/in/esquire-expensive" class="mx-2"><span class="bi-linkedin"></span></a>
+    
+                  
+                </div>
+
+               
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+  
+            <div class="offcanvas-body">
+              <ul class="navbar-nav  justify-content-center  flex-grow-1 pe-3">
+                <!-- <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Contact</a>
+                </li> -->
+  
+                <li class="nav-item d-none d-md-flex  ">
+  
+                  <a href="https://wa.me/+2348166398746" class="mx-2"><span class="bi-whatsapp"></span></a>
+                  <a href="https://twitter.com/esquirexpensive" class="mx-2"><span class="bi-twitter"></span></a>
+  
+                  <a href="https://instagram.com/expensive_7832" class="mx-2"><span class="bi-instagram"></span></a>
+                  <a href="https://linkedin.com/in/esquire-expensive" class="mx-2"><span class="bi-linkedin"></span></a>
+  
+                </li>
+  
+  
+  
+              </ul>
+
+              
+              <!-- <div class="d-md-none ">
+                <a class="nav-link active" aria-current="page" href="#">About</a>
+                  <a class="nav-link" href="#">Contact</a>
+              </div> -->
+  
+  
+             
+            </div>
+  
+            
+          </div>
+        </div>
+      </nav>
+
+      
+  
+      <div style="flex:1;" class="d-flex justify-content-center  ">
+        {% if auth is not None %}
+  
+        <div class="dropdown">
+          <button class="btn border-0 dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+  
+            <div class="">
+  
+              <img class="rounded-circle " src="/media/{{auth.image}}" height="40" width="40" alt="">
+            </div>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="triggerId">
+  
+            <a href="/post-article" class="nav-link p-1 ">Post Article</a>
+            <div class="dropdown-divider"></div>
+            <a href="/update-profile/{{auth.id}}" class="nav-link p-1 ">Update Profile</a>
+            <div class="dropdown-divider"></div>
+  
+  
+  
+  
+            <div class="dropdown-divider"></div>
+            <div class="">
+              <input type="text" hidden value="{{auth.id}}" id="logid">
+              <li onclick="handledelete()" class="btn btn-dark  m-2 d-flex justify-content-center  "> Delete Account
+              </li>
+              <li class="btn btn-dark  m-2 d-flex justify-content-center  "> <a class="text-white "
+                  href="/logout">Logout</a> </li>
+  
+            </div>
+          </div>
+        </div>
+  
+        {% else %}
+        <h1>{{auth.image}}</h1>
+        <li class="nav-item list-unstyled  "> <a class="" href="/login">Login</a> </li>
+  
+        {% endif %}
+      </div>
+    </div>
+
+   
+    <div class="container">
+      <div class="row justify-content-center ">
+        <div class="col-md-7">
+          <form class="d-flex search" method="get" action="/search/">
+            <input name="text" class="form-control" type="search" placeholder="Search" aria-label="Search" />
+            <button class="btn btn-dark" type="submit">
+              <i class="bi-search"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </header><!-- End Header -->
+
+
+
+  {% block main-content %}{% endblock %}
+
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+
+    <!-- <div class="footer-content">
+      <div class="container">
+
+        <div class="row g-5">
+          <div class="col-lg-4">
+            <h3 class="footer-heading">About EarDrop</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam ab, perspiciatis beatae autem deleniti
+              voluptate nulla a dolores, exercitationem eveniet libero laudantium recusandae officiis qui aliquid
+              blanditiis omnis quae. Explicabo?</p>
+
+          </div>
+          <div class="col-6 col-lg-2">
+            <h3 class="footer-heading">Navigation</h3>
+            <ul class="footer-links list-unstyled">
+              <li><a href="index.html"><i class="bi bi-chevron-right"></i> Home</a></li>
+              <li><a href="index.html"><i class="bi bi-chevron-right"></i> Blog</a></li>
+              <li><a href="category.html"><i class="bi bi-chevron-right"></i> Categories</a></li>
+              <li><a href="single-post.html"><i class="bi bi-chevron-right"></i> Single Post</a></li>
+              <li><a href="about.html"><i class="bi bi-chevron-right"></i> About us</a></li>
+              <li><a href="contact.html"><i class="bi bi-chevron-right"></i> Contact</a></li>
+            </ul>
+          </div>
+          <div class="col-6 col-lg-2">
+            <h3 class="footer-heading">Categories</h3>
+            <ul class="footer-links list-unstyled">
+              <li><a href="category.html"><i class="bi bi-chevron-right"></i> Business</a></li>
+              <li><a href="category.html"><i class="bi bi-chevron-right"></i> Culture</a></li>
+              <li><a href="category.html"><i class="bi bi-chevron-right"></i> Sport</a></li>
+              <li><a href="category.html"><i class="bi bi-chevron-right"></i> Food</a></li>
+              <li><a href="category.html"><i class="bi bi-chevron-right"></i> Politics</a></li>
+              <li><a href="category.html"><i class="bi bi-chevron-right"></i> Celebrity</a></li>
+              <li><a href="category.html"><i class="bi bi-chevron-right"></i> Startups</a></li>
+              <li><a href="category.html"><i class="bi bi-chevron-right"></i> Travel</a></li>
+
+            </ul>
+          </div>
+
+          <div class="col-lg-4">
+            <h3 class="footer-heading">Recent Posts</h3>
+
+            <ul class="footer-links footer-blog-entry list-unstyled">
+              <li>
+                <a href="single-post.html" class="d-flex align-items-center">
+                  <img src="assets/img/post-sq-1.jpg" alt="" class="img-fluid me-3">
+                  <div>
+                    <div class="post-meta d-block"><span class="date">Culture</span> <span class="mx-1">&bullet;</span>
+                      <span>Jul 5th '22</span></div>
+                    <span>5 Great Startup Tips for Female Founders</span>
+                  </div>
+                </a>
+              </li>
+
+              <li>
+                <a href="single-post.html" class="d-flex align-items-center">
+                  <img src="assets/img/post-sq-2.jpg" alt="" class="img-fluid me-3">
+                  <div>
+                    <div class="post-meta d-block"><span class="date">Culture</span> <span class="mx-1">&bullet;</span>
+                      <span>Jul 5th '22</span></div>
+                    <span>What is the son of Football Coach John Gruden, Deuce Gruden doing Now?</span>
+                  </div>
+                </a>
+              </li>
+
+              <li>
+                <a href="single-post.html" class="d-flex align-items-center">
+                  <img src="assets/img/post-sq-3.jpg" alt="" class="img-fluid me-3">
+                  <div>
+                    <div class="post-meta d-block"><span class="date">Culture</span> <span class="mx-1">&bullet;</span>
+                      <span>Jul 5th '22</span></div>
+                    <span>Life Insurance And Pregnancy: A Working Mom’s Guide</span>
+                  </div>
+                </a>
+              </li>
+
+              <li>
+                <a href="single-post.html" class="d-flex align-items-center">
+                  <img src="assets/img/post-sq-4.jpg" alt="" class="img-fluid me-3">
+                  <div>
+                    <div class="post-meta d-block"><span class="date">Culture</span> <span class="mx-1">&bullet;</span>
+                      <span>Jul 5th '22</span></div>
+                    <span>How to Avoid Distraction and Stay Focused During Video Calls?</span>
+                  </div>
+                </a>
+              </li>
+
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="footer-legal">
+      <div class="container">
+
+        <div class="row justify-content-between">
+          <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+            <div class="copyright">&copy;
+                <script>
+                  document.write(new Date().getFullYear())
+                </script>
+             
+            </div>
+
+            <div class="credits">
+              
+              Designed by <a href="https://jimohkayodeyusuf.netlify.app">Esq. Yusuf</a>
+            </div>
+
+          </div>
+
+          <div class="col-md-6">
+            <div class="social-links mb-3 mb-lg-0 text-center text-md-end">
+              <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+              <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+              <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+              <a href="#" class="google-plus"><i class="bi bi-skype"></i></a>
+              <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </footer>
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/jquery.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="https://cdn.tiny.cloud/1/351dzhcn0uvhc1qpq2uozl6u5xgtw1ct82s0hbbdx9zdf348/tinymce/6/tinymce.min.js"
+    referrerpolicy="origin"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  
+  <!-- Template Main JS File -->
+  <!-- <script src="{% static 'assets/vendor/aos/aos.min.js' %}"></script> -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+
+
+</body>
+
+</html>
